@@ -1,0 +1,12 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  
+  <!-- Outer circle -->
+  <circle cx="32" cy="32" r="28" fill="#151515"></circle>
+
+  <!-- Inner soft glow -->
+  <circle cx="32" cy="32" r="20" fill="#1f1f1f"></circle>
+
+  <!-- Center dot (beige like your logo) -->
+  <circle cx="32" cy="32" r="7" fill="#E7D2B5"></circle>
+
+</svg>

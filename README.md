@@ -121,6 +121,15 @@ Language switching is handled dynamically using `vue-i18n`.
 
 ---
 
+## ⚠️ À améliorer
+
+- Ajouter un schéma d’architecture (frontend → API → backend AI pipeline)
+- Ajouter une section API contract (endpoints, payloads, exemples de requêtes/réponses)
+- Ajouter des screenshots / GIF de démonstration pour améliorer la compréhension produit
+- Ajouter une gestion des error handling & limitations (échecs AI, fallback UI, retry logic)
+- Ajouter un guide CI/CD + deployment (Vercel / Netlify / Docker / GitHub Actions)
+- Clarifier la sécurité des clés API (usage de variables d’environnement, risques frontend, bonnes pratiques)
+
 ## 🤝 Contributing
 
 Contributions are welcome.
