@@ -45,10 +45,10 @@ It focuses on emotional storytelling through visual enhancement and generative A
 ```
 src/
 ├── components/        # UI components
-│   ├── Hero.vue
-│   ├── Features.vue
-│   ├── Pricing.vue
-│   ├── Stories.vue
+│   ├── HeroSection.vue
+│   ├── FeatureSection.vue
+│   ├── PricingSection.vue
+│   ├── StoryTellingSection.vue
 │   ├── Navbar.vue
 │   └── Footer.vue
 │
