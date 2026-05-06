@@ -139,6 +139,39 @@ const messages = {
 
       beforeLabel: '1962 · Original',
       afterLabel: 'Restauré · 2024'
+    },
+    testimonials: {
+      title: 'Voix',
+      subtitle: 'Des souvenirs qui ont ému jusqu’aux larmes',
+      testimonials: [
+        {
+          quote: "J’ai pleuré en voyant le sourire de ma mère à nouveau… Je n’avais jamais eu de photo nette d’elle — maintenant si.",
+          name: 'Maria L.',
+          location: 'São Paulo, Brésil'
+        },
+        {
+          quote: "Je n’arrivais pas à croire à quel point c’était réel. C’était comme revenir dans le passé pendant dix précieuses secondes.",
+          name: 'James K.',
+          location: 'Londres, Royaume-Uni'
+        },
+        {
+          quote: "Ma grand-mère est décédée avant ma naissance. C’est la première fois que je vois vraiment son visage.",
+          name: 'Aiko T.',
+          location: 'Tokyo, Japon'
+        },
+        {
+          quote: "J’ai envoyé la vidéo à toute ma famille. On a tous pleuré ensemble. Les meilleurs 9€ que j’ai dépensés.",
+          name: 'David R.',
+          location: 'Chicago, États-Unis'
+        }
+      ]
+    },
+    cta: {
+      titleLine1: 'Chaque photo cache quelqu’un',
+      titleHighlight: 'qui mérite d’être rappelé',
+      description: 'Importez votre photo maintenant. Il suffit de 30 secondes pour redécouvrir le passé comme vous ne l’avez jamais vu.',
+      button: 'Importer votre photo',
+      footer: 'Aperçu gratuit · Aucun compte requis'
     }
   },
 
@@ -282,6 +315,39 @@ const messages = {
 
       beforeLabel: '1962 · Original',
       afterLabel: 'Restored · 2024'
+    },
+    testimonials: {
+      title: 'Stories',
+      subtitle: 'Memories that moved people to tears',
+      testimonials: [
+        {
+          quote: 'I cried when I saw my mother smile again. I never had a clear photo of her — now I do.',
+          name: 'Maria L.',
+          location: 'São Paulo, Brazil'
+        },
+        {
+          quote: "I couldn't believe it felt so real. It was like stepping back in time for ten precious seconds.",
+          name: 'James K.',
+          location: 'London, UK'
+        },
+        {
+          quote: 'My grandmother passed before I was born. This is the first time I truly saw her face.',
+          name: 'Aiko T.',
+          location: 'Tokyo, Japan'
+        },
+        {
+          quote: 'I sent the video to my whole family. We all cried together. Best $9 I ever spent.',
+          name: 'David R.',
+          location: 'Chicago, USA'
+        }
+      ]
+    },
+    cta: {
+      titleLine1: 'Every photo holds someone',
+      titleHighlight: 'worth remembering',
+      description: 'Upload your photo now. It takes 30 seconds to see the past in a way you never have before.',
+      button: 'Upload your photo',
+      footer: 'Free preview · No account needed'
     }
   }
 }

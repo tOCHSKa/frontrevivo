@@ -184,6 +184,22 @@ function handleFileChange(e) {
   }
 }
 
+// const store = useUserStore()
+
+// const formData = new FormData()
+// formData.append('file', file)
+
+// const res = await fetch(`${API_URL}/upload`, {
+//   method: 'POST',
+//   headers: {
+//     'x-session-id': store.sessionId || ''
+//   },
+//   body: formData
+// })
+
+// const data = await res.json()
+
+// store.setSession(data.sessionId)
 
 </script>
 

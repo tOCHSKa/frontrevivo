@@ -64,11 +64,11 @@
         >
           <blockquote class="space-y-6">
             <p class="font-serif italic text-2xl md:text-3xl text-foreground leading-relaxed">
-              {{ t('stories.quote1') }}
+              "{{ t('stories.quote1') }}
             </p>
 
             <p class="font-serif italic text-2xl md:text-3xl text-primary leading-relaxed">
-              {{ t('stories.quote2') }}
+              {{ t('stories.quote2') }}"
             </p>
           </blockquote>
 

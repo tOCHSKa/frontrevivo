@@ -130,8 +130,8 @@ function setActive(link) {
 const links = [
   { label: 'nav.home', href: '#home' },
   { label: 'nav.features', href: '#features' },
+  { label: 'nav.stories', href: '#stories' },
   { label: 'nav.pricing', href: '#pricing' },
-  { label: 'nav.stories', href: '#stories' }
 ]
 
 const lang = ref('fr')
