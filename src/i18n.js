@@ -141,7 +141,7 @@ const messages = {
       afterLabel: 'Restauré · 2024'
     },
     testimonials: {
-      title: 'Voix',
+      title: 'Histoires',
       subtitle: 'Des souvenirs qui ont ému jusqu’aux larmes',
       testimonials: [
         {

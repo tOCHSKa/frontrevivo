@@ -1,7 +1,7 @@
 <template>
   <div
     id="features"
-    class="relative py-24 md:py-36 overflow-hidden bg-black"
+    class="relative py-24 overflow-hidden bg-black"
   >
     <div class="max-w-6xl mx-auto px-6 relative z-10">
       <!-- Heading -->

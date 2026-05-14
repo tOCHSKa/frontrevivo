@@ -1,68 +1,38 @@
 <template>
-  <div class="max-w-7xl mx-auto px-6 lg:px-8 ">
+  <nav class=" fixed top-0 left-0 right-0 z-50 transition-all duration-300" 
+  :class="isScrolled ? 'border-b border-border backdrop-blur bg-black/80 shadow-sm' : 'bg-background/90'">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 lg:h-20">
-      
+
       <!-- Logo -->
-      <a href="#" class="flex items-center gap-2">
+      <a href="#home" class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center">
           <div class="w-3 h-3 rounded-full bg-primary"></div>
         </div>
-        <span>
-          <a href="#home" class="font-serif text-xl italic text-foreground tracking-wide">Revivo</a>
+        <span class="font-serif text-xl italic text-foreground tracking-wide">
+          Revivo
         </span>
       </a>
 
-      <!-- Desktop Links -->
-      <div class="hidden md:flex items-center gap-8">
-        <a
-          v-for="link in links"
-          :key="link.label"
-          :href="link.href"
-          @click="setActive(link.label)"
-          class="text-sm font-sans tracking-wide uppercase transition-colors duration-300 relative cursor-pointer"
-          :class="activeLink === link.label
-            ? 'text-foreground'
-            : 'text-muted-foreground hover:text-foreground'"
-        >
-          {{ t(link.label) }}
+      <!-- Desktop -->
+      <NavLinks
+        :links="links"
+        :activeSection="activeSection"
+        @navigate="scrollTo"
+      />
 
-          <!-- underline actif -->
-          <span
-            class="absolute left-0 -bottom-1 h-0.5 bg-primary transition-all duration-300"
-            :class="activeLink === link.label ? 'w-full' : 'w-0 group-hover:w-full'"
-          ></span>
-        </a>
-      </div>
-
-      <!-- CTA -->
       <div class="hidden md:flex items-center gap-4">
-        <a
-          href="#home"
-          class="px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-medium font-sans tracking-wide hover:bg-primary/90 transition-all duration-300 cursor-pointer"
-        >
-          {{ t('nav.cta') }}
-        </a>
-        
-              <!-- Language switch -->
-      <div class="hidden md:flex items-center gap-2">
-        <button
-          @click="setLang('fr')"
-          class="text-xl hover:scale-110 transition text-white cursor-pointer"
-          :class="lang === 'fr' ? 'opacity-100' : 'opacity-50'"
-        >
-          🇫🇷
-        </button>
-        <button
-          @click="setLang('en')"
-          class="text-xl hover:scale-110 transition text-white cursor-pointer"
-          :class="lang === 'en' ? 'opacity-100' : 'opacity-50'"
-        >
-          🇬🇧
-        </button>
+        <NavActions />
+
+        <LanguageSwitcher
+          :lang="lang"
+          @change="setLang"
+        />
       </div>
-      </div>
+
       <!-- Mobile button -->
       <button
+        ref="menuButtonRef"
         @click="mobileOpen = !mobileOpen"
         class="md:hidden text-foreground"
       >
@@ -73,77 +43,42 @@
     </div>
 
     <!-- Mobile menu -->
-    <div
-        class="md:hidden fixed top-16 left-0  w-full bg-background flex flex-col gap-4 py-6 px-6 transition-transform duration-300 transform z-50 cursor-pointer"
-        :class="mobileOpen ? 'translate-x-0' : '-translate-x-full'"
-        >
-      <a
-        v-for="link in links"
-        :key="link.label"
-        :href="link.href"
-        @click="setActive(link.label)"
-        class="text-sm uppercase transition"
-        :class="activeLink === link.label
-          ? 'text-foreground'
-          : 'text-muted-foreground'"
-      >
-        {{ t(link.label) }}
-      </a>
-      <div class="flex gap-4 pt-4 border-t border-border">
-  <button
-    @click="setLang('fr')"
-    class="text-xl hover:scale-110 transition text-white cursor-pointer"
-    :class="lang === 'fr' ? 'opacity-100' : 'opacity-50'"
-  >
-    🇫🇷
-  </button>
-
-  <button
-    @click="setLang('en')"
-    class="text-xl hover:scale-110 transition text-white cursor-pointer"
-    :class="lang === 'en' ? 'opacity-100' : 'opacity-50'"
-  >
-    🇬🇧
-  </button>
-</div>
-    </div>
-    
-
+    <MobileMenu
+      :open="mobileOpen"
+      :links="links"
+      :activeSection="activeSection"
+      :lang="lang"
+      @navigate="scrollTo"
+      @close="mobileOpen = false"
+      @change-lang="setLang"
+    />
   </div>
+</nav>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useScrollSpy } from '../composables/useScrollSpy'
+import { NAV_LINKS } from '../config/navigation'
 
-const { t, locale } = useI18n()
+import NavLinks from './navbar/NavLinks.vue'
+import NavActions from './navbar/NavActions.vue'
+import LanguageSwitcher from './navbar/LanguageSwitcher.vue'
+import MobileMenu from './navbar/MobileMenu.vue'
 
+// data
+const links = NAV_LINKS
 const mobileOpen = ref(false)
-
-const activeLink = ref('nav.home')
-
-function setActive(link) {
-  activeLink.value = link
-  mobileOpen.value = false
-}
-
-const links = [
-  { label: 'nav.home', href: '#home' },
-  { label: 'nav.features', href: '#features' },
-  { label: 'nav.stories', href: '#stories' },
-  { label: 'nav.pricing', href: '#pricing' },
-]
-
 const lang = ref('fr')
 
+// i18n
+const { locale } = useI18n()
 
-onMounted(() => {
-  const saved = localStorage.getItem('lang')
-  if (saved) {
-    lang.value = saved
-    locale.value = saved
-  }
-})
+// scroll spy
+const { activeSection } = useScrollSpy(
+  links.map(l => l.id)
+)
 
 function setLang(newLang) {
   lang.value = newLang
@@ -151,14 +86,42 @@ function setLang(newLang) {
   localStorage.setItem('lang', newLang)
 }
 
-function scrollToSection(id) {
+// scroll
+function scrollTo(id) {
   const el = document.getElementById(id)
-  if (el) {
-    const y = el.getBoundingClientRect().top + window.scrollY - 80
-    window.scrollTo({ top: y, behavior: 'smooth' })
-  }
+  if (!el) return
+
+  const y = el.getBoundingClientRect().top + window.scrollY - 80
+
+  window.scrollTo({
+    top: y,
+    behavior: 'smooth'
+  })
 }
 
+const isScrolled = ref(false)
+
+function handleScroll() {
+  isScrolled.value = window.scrollY > 10
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  handleScroll()
+
+  const saved = localStorage.getItem('lang')
+  if (saved) {
+    lang.value = saved
+    locale.value = saved
+  }
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
 </script>
+
+
 <style scoped>
 </style>

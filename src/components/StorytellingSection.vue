@@ -1,6 +1,6 @@
 
 <template>
-  <div id="stories" class="relative py-24 md:py-36 overflow-hidden bg-black">
+  <div id="stories" class="relative py-20 overflow-hidden bg-black scroll-mt-20">
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
 
     <div class="max-w-6xl mx-auto px-6">

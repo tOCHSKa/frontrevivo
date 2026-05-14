@@ -20,41 +20,11 @@
 
       <!-- Cards -->
       <div class="grid sm:grid-cols-2 gap-6 md:gap-8">
-        <div
+        <TestimonialCard
           v-for="(item, index) in testimonialsData.testimonials" :key="index"
-          ref="cardsRef"
-          class="p-8 md:p-10 rounded-2xl bg-card backdrop-blur-sm border border-border/30 transition-all duration-700"
-          :style="{ transitionDelay: `${index * 0.1}s` }"
-          :class="cardsVisible[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
-        >
-          
-          <!-- Stars -->
-          <div class="flex gap-1 mb-6">
-            <span
-              v-for="i in 5"
-              :key="i"
-              class="w-4 h-4 text-primary"
-            >
-              ★
-            </span>
-          </div>
-
-          <!-- Quote -->
-          <p class="font-serif italic text-lg md:text-xl text-foreground leading-relaxed mb-6">
-            "{{ item.quote }}"
-          </p>
-
-          <!-- Author -->
-          <div>
-            <p class="font-sans text-white text-sm font-medium">
-              {{ item.name }}
-            </p>
-            <p class="font-sans text-white/60 text-xs mt-0.5">
-              {{ item.location }}
-            </p>
-          </div>
-
-        </div>
+          :item="item"
+          :delay="index * 0.1"
+        />
       </div>
 
     </div>
@@ -64,16 +34,15 @@
 <script setup>
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
+import TestimonialCard from './TestimonialCard.vue'
 
 const { tm } = useI18n()
 
 const testimonialsData = computed(() => tm('testimonials'))
 
 const headerRef = ref(null)
-const cardsRef = ref([])
-
 const headerVisible = ref(false)
-const cardsVisible = ref([])
+
 
 const observe = (el, setter) => {
   if (!el) return
@@ -94,11 +63,5 @@ onMounted(async () => {
   if (headerRef.value) {
     observe(headerRef.value, v => (headerVisible.value = v))
   }
-
-  cardsRef.value.forEach((el, index) => {
-    observe(el, () => {
-      cardsVisible.value[index] = true
-    })
-  })
 })
 </script>

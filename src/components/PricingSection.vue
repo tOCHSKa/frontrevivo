@@ -1,5 +1,5 @@
 <template>
-  <div class="relative md:py-24 overflow-hidden bg-black">
+  <div class="relative py-16 overflow-hidden bg-black">
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
 
     <div class="max-w-6xl mx-auto px-6 relative z-10">
@@ -105,7 +105,7 @@ const plans = computed(() => [
       'Colorization preview',
       'Watermarked result',
     ],
-    cta: 'Try it free',
+    cta: t('pricing.plans.free.cta'),
     featured: false,
   },
   {

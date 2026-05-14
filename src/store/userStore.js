@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { jwtDecode } from 'jwt-decode'
-
-const API_URL = import.meta.env.VITE_API_URL
+import { login as loginAPI, me as meAPI, register as registerAPI } from '@/services/api'
 
 function isTokenValid(token) {
   try {
@@ -24,13 +23,15 @@ export const useUserStore = defineStore('user', {
   }),
 
   actions: {
-    // 🔹 INIT (appelé au démarrage app)
+    // -------------------
+    // INIT APP
+    // -------------------
     initializeStore() {
       const token = localStorage.getItem('token')
       const sessionId = localStorage.getItem('sessionId')
 
       if (token && isTokenValid(token)) {
-        this.setUser({ token })
+        this.setUserFromToken(token)
       } else {
         this.logout()
       }
@@ -39,12 +40,51 @@ export const useUserStore = defineStore('user', {
         this.sessionId = sessionId
       }
 
-      // auto-check expiration
       this.startTokenWatcher()
     },
 
-    // 🔹 SET USER
-    setUser({ token }) {
+    // -------------------
+    // LOGIN
+    // -------------------
+    async login(credentials) {
+      try {
+        const data = await loginAPI(credentials)
+
+        this.setUserFromToken(data.token)
+
+        return data
+      } catch (error) {
+        throw new Error(error.message || 'Login failed')
+      }
+    },
+
+    // -------------------
+    // REGISTER
+    // -------------------
+    async register(credentials) {
+      try {
+        return await registerAPI(credentials)
+      } catch (error) {
+        throw new Error(error.message || 'Register failed')
+      }
+    },
+
+    // -------------------
+    // ME (fetch user)
+    // -------------------
+    async fetchMe() {
+      try {
+        const data = await meAPI()
+        return data
+      } catch (error) {
+        throw new Error(error.message || 'Failed to fetch user')
+      }
+    },
+
+    // -------------------
+    // SET USER FROM TOKEN
+    // -------------------
+    setUserFromToken(token) {
       if (!isTokenValid(token)) {
         this.logout()
         return
@@ -61,7 +101,9 @@ export const useUserStore = defineStore('user', {
       localStorage.setItem('token', token)
     },
 
-    // 🔹 SESSION (guest flow)
+    // -------------------
+    // SESSION (guest)
+    // -------------------
     setSession(sessionId) {
       this.sessionId = sessionId
       localStorage.setItem('sessionId', sessionId)
@@ -72,33 +114,9 @@ export const useUserStore = defineStore('user', {
       localStorage.removeItem('sessionId')
     },
 
-    // 🔹 LOGIN
-    async login(credentials) {
-      try {
-        const response = await fetch(`${API_URL}/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(credentials)
-        })
-
-        const data = await response.json()
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Login failed')
-        }
-
-        this.setUser(data)
-
-        return { success: true }
-      } catch (error) {
-        console.error('Login error:', error)
-        return { success: false, message: error.message }
-      }
-    },
-
-    // 🔹 LOGOUT
+    // -------------------
+    // LOGOUT
+    // -------------------
     logout() {
       this.email = null
       this.name = null
@@ -111,66 +129,29 @@ export const useUserStore = defineStore('user', {
       localStorage.removeItem('sessionId')
     },
 
-    // 🔹 AUTH HEADERS (centralisé)
-    getAuthHeaders() {
-      return {
-        'Content-Type': 'application/json',
-        ...(this.token && {
-          Authorization: `Bearer ${this.token}`
-        })
-      }
-    },
-
-    // 🔹 FETCH WRAPPER (ultra utile 🔥)
-    async apiFetch(endpoint, options = {}) {
-      try {
-        const response = await fetch(`${API_URL}${endpoint}`, {
-          ...options,
-          headers: {
-            ...this.getAuthHeaders(),
-            ...options.headers
-          }
-        })
-
-        const data = await response.json()
-
-        if (!response.ok) {
-          throw new Error(data.error || 'API error')
-        }
-
-        return data
-      } catch (error) {
-        console.error('API error:', error)
-        throw error
-      }
-    },
-
-    // 🔹 TOKEN AUTO-EXPIRATION
+    // -------------------
+    // TOKEN WATCHER
+    // -------------------
     startTokenWatcher() {
       setInterval(() => {
         if (this.token && !isTokenValid(this.token)) {
-          console.warn('Token expired → logout')
           this.logout()
         }
-      }, 60000) // check toutes les 60s
+      }, 60000)
     }
   },
 
   getters: {
     isAdmin: (state) => state.role === 'admin',
     isLoggedIn: (state) => state.isAuthenticated,
-    userEmail: (state) => state.email,
-    userRole: (state) => state.role,
-    userToken: (state) => state.token,
-    userSessionId: (state) => state.sessionId,
-    userName: (state) => state.name,
-    allUserData: (state) => ({
+
+    user: (state) => ({
       email: state.email,
       name: state.name,
-      role: state.role,
-      token: state.token,
-      sessionId: state.sessionId,
-      isAuthenticated: state.isAuthenticated
-    })
+      role: state.role
+    }),
+
+    token: (state) =>
+      state.token || localStorage.getItem('token')
   }
 })
