@@ -31,20 +31,23 @@
         </div>
       </div>
     </div>
-    <div v-if="previewUrl && !isLoading" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 ">
-        <button 
-            @click="sendImage"
-            class="px-4 py-2 rounded-full bg-primary text-black text-sm font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            >
-            Image
-            </button>
+    <div 
+      v-if="previewUrl && !isLoading" 
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-2"
+    >
+      <button 
+        @click.stop="sendImage"
+        class="px-4 py-2 rounded-full bg-primary text-black text-sm font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+      >
+        Image
+      </button>
 
-            <button
-            @click="consoleLogButton"
-            class="px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium cursor-pointer transition-all duration-300 hover:scale-105"
-            >
-            Video
-        </button>
+      <button
+        @click.stop="sendImage"
+        class="px-4 py-2 rounded-full bg-white/10 text-white text-sm font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+      >
+        Video
+      </button>
     </div>
       <div  class="flex flex-col items-center gap-4"
       :class="previewUrl ? 'opacity-0 pointer-events-none' : 'opacity-100'">
@@ -104,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps, defineEmits } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { onBeforeUnmount } from 'vue'
 
@@ -114,7 +117,11 @@ const emit = defineEmits(['fileUpload'])
 const isDragging = ref(false)
 const fileInput = ref(null)
 const previewUrl = ref(null)
-const isLoading = ref(false)
+const selectedFile = ref(null)
+
+const props = defineProps({
+  isLoading: Boolean
+})
 
 function openFilePicker() {
   fileInput.value?.click()
@@ -124,6 +131,7 @@ function setPreview(file) {
   if (previewUrl.value) {
     URL.revokeObjectURL(previewUrl.value)
   }
+  selectedFile.value = file
   previewUrl.value = URL.createObjectURL(file)
 }
 
@@ -133,7 +141,6 @@ function handleDrop(e) {
 
   if (file && file.type.startsWith('image/')) {
     setPreview(file)
-    emit('fileUpload', file)
   }
 }
 
@@ -150,7 +157,6 @@ function handleFileChange(e) {
 
   if (file) {
     setPreview(file)
-    emit('fileUpload', file)
   }
 }
 
@@ -168,7 +174,12 @@ function handleClick() {
 }
 
 function sendImage() {
+  if (!selectedFile.value) return
+
   console.log('Image sent')
-  isLoading.value = true
+  emit('fileUpload', selectedFile.value)
 }
+
+
+
 </script>

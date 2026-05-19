@@ -1,7 +1,9 @@
 <template>
     <NavBar />
   <section id="home" class="">
-    <HeroSection />
+    <HeroSection  
+    :isLoading="isLoading" 
+    @fileUpload="handleUpload"/>
     <LivePreviewSection />
   </section>
   <section id="features" class="">
@@ -33,4 +35,21 @@ import TestimonialsSection from '@/components/TestimonialsSection.vue'
 import Footer from '@/components/Footer.vue'
 import FinalCTA from '@/components/FinalCTA.vue'
 
+import { ref } from 'vue'
+
+const isLoading = ref(false)
+
+async function handleUpload(file) {
+  isLoading.value = true
+
+  try {
+    console.log(file)
+
+    // simulate API
+    await new Promise(r => setTimeout(r, 1500))
+
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>

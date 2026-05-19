@@ -172,6 +172,20 @@ const messages = {
       description: 'Importez votre photo maintenant. Il suffit de 30 secondes pour redécouvrir le passé comme vous ne l’avez jamais vu.',
       button: 'Importer votre photo',
       footer: 'Aperçu gratuit · Aucun compte requis'
+    },
+    login: {
+      title: 'Bienvenue sur Revivo AI',
+      subtitle: 'Connectez-vous pour continuer',
+      google: 'Continuer avec Google',
+      forgotPassword: 'Mot de passe oublié?',
+      needAccount: 'Besoin d\'un compte?',
+      label: {
+        email: 'Email',
+        password: 'Mot de passe'
+      },
+      or: 'ou',
+      button: 'Se connecter',
+      signUp: 'S\'inscrire'
     }
   },
 
@@ -348,6 +362,20 @@ const messages = {
       description: 'Upload your photo now. It takes 30 seconds to see the past in a way you never have before.',
       button: 'Upload your photo',
       footer: 'Free preview · No account needed'
+    },
+    login: {
+      title: 'Welcome to Revivo AI',
+      subtitle: 'Sign in to continue',
+      google: 'Continue with Google',
+      forgotPassword: 'Forgot password?',
+      needAccount: 'Need an account?',
+      label: {
+        email: 'Email',
+        password: 'Password'
+      },
+      or: 'or',
+      button: 'Sign in',
+      signUp: 'Sign up'
     }
   }
 }

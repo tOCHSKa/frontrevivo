@@ -18,7 +18,9 @@
     </p>
 
     <!-- Upload -->
-    <HeroUpload @fileUpload="$emit('fileUpload', $event)" />
+    <HeroUpload 
+    @fileUpload="$emit('fileUpload', $event)" 
+    :isLoading="isLoading" />
 
     <!-- CTA -->
     <HeroExampleCTA />
@@ -29,8 +31,15 @@
 import { useI18n } from 'vue-i18n'
 import HeroUpload from './HeroUpload.vue'
 import HeroExampleCTA from './HeroExampleCTA.vue'
+import { defineProps } from 'vue'
 
 const { t } = useI18n()
 
 defineEmits(['fileUpload'])
+defineProps({
+  isLoading: {
+    type: Boolean,
+    default: false
+  }
+})
 </script>

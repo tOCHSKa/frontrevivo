@@ -25,7 +25,7 @@
         <NavActions />
 
         <LanguageSwitcher
-          :lang="lang"
+          :lang="locale"
           @change="setLang"
         />
       </div>
@@ -70,7 +70,6 @@ import MobileMenu from './navbar/MobileMenu.vue'
 // data
 const links = NAV_LINKS
 const mobileOpen = ref(false)
-const lang = ref('fr')
 
 // i18n
 const { locale } = useI18n()
@@ -81,7 +80,6 @@ const { activeSection } = useScrollSpy(
 )
 
 function setLang(newLang) {
-  lang.value = newLang
   locale.value = newLang
   localStorage.setItem('lang', newLang)
 }
@@ -105,15 +103,29 @@ function handleScroll() {
   isScrolled.value = window.scrollY > 10
 }
 
+function initLanguage() {
+  const saved = localStorage.getItem('lang')
+
+  if (saved) {
+
+    locale.value = saved
+    return
+  }
+
+  const browserLang = navigator.language.split('-')[0]
+
+  const supported = ['fr', 'en']
+
+  locale.value = supported.includes(browserLang)
+    ? browserLang
+    : 'en'
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   handleScroll()
 
-  const saved = localStorage.getItem('lang')
-  if (saved) {
-    lang.value = saved
-    locale.value = saved
-  }
+  initLanguage()
 })
 
 onBeforeUnmount(() => {
